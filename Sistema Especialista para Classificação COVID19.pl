@@ -36,7 +36,7 @@ paciente(rafael, 21, 36, 150, 35, 110, 100, false, 0). % freq_respiratória grav
 paciente(willyam, 65, 37.5, 105, 20, 120, 100, false, 1). % fica em observação (amarelo)
 paciente(maia, 95, 37.2, 100, 25, 90, 100, false, 2). % idade e comorbidades graves (laranja)
 paciente(joao, 75, 39, 110, 30, 120, 100, false, 1). % fica em observação (amarelo)
-paciente(pedro, 50, 36, 110, 30, 120, 100, false, 0). % sem risco, liberado (verde)
+paciente(pedro, 50, 36, 90, 15, 120, 100, false, 0). % sem risco, liberado (verde)
 
 
 
@@ -94,12 +94,12 @@ comorbidade_alta(N):-paciente(N,_,_,_,_,_,_,_,C), C >= 2.
 
 % Catogorização
 
-verifica_paciente(X):-pac_liberado(X); pac_sem_risco(X); pac_risco(X).
+verifica_paciente(X):-pac_sem_risco(X). %; pac_risco(X).
 
 
 %  Paciente sem risco, mas deve ficar em observação:
 pac_sem_risco(X):-(   idade(X), febre(X), freq_cardiaca(X), freq_respiratoria(X), comorbidade(X) ),
-    print(X), write(" - paciente sem risco, mas deve ficar em observação\n").
+    print(X), write(" - paciente sem risco, mas deve ficar em observação\n").%; pac_liberado(X).
 
 %  Paciente com risco, deve ser encaminhado para hospital:
 pac_risco(X):-(idade_alta(X); febre_alta(X); freq_respiratoria_altissima(X); 
@@ -109,4 +109,6 @@ pac_risco(X):-(idade_alta(X); febre_alta(X); freq_respiratoria_altissima(X);
 
 pac_liberado(X):-not(pac_sem_risco(X)), print(X), 
     write(" - paciente liberado, sem risco algum de contaminacao\n").
+
+% TODO: willyam entrando em pac_liberado, quem deve entrar é Pedro.
 
