@@ -33,9 +33,11 @@
 % paciente(nome, idade, temp, Freq. Cardiaca, Freq. respiratória, P_arterial, Sat_Oxigênio, Dispnéia, Comorbidades)
 paciente(larissa, 22, 36, 100, 25, 90, 95, true, 0). % p_arterial e dispinéia grave (laranja)
 paciente(rafael, 21, 36, 150, 35, 110, 100, false, 0). % freq_respiratória gravissímo (vermelho)
-paciente(willyam, 65, 37.5, 105, 20, 120, 100, false, 1). % sem risco (amarelo)
+paciente(willyam, 65, 37.5, 105, 20, 120, 100, false, 1). % fica em observação (amarelo)
 paciente(maia, 95, 37.2, 100, 25, 90, 100, false, 2). % idade e comorbidades graves (laranja)
-paciente(p_obs, 75, 39, 110, 30, 120, 100, false, 1). % sem risco (amarelo)
+paciente(joao, 75, 39, 110, 30, 120, 100, false, 1). % fica em observação (amarelo)
+paciente(pedro, 50, 36, 110, 30, 120, 100, false, 0). % sem risco, liberado (verde)
+
 
 
 % Regras
@@ -90,11 +92,21 @@ comorbidade_alta(N):-paciente(N,_,_,_,_,_,_,_,C), C >= 2.
 
 
 
-% Running...
-% 
+% Catogorização
+
+verifica_paciente(X):-pac_liberado(X); pac_sem_risco(X); pac_risco(X).
+
+
 %  Paciente sem risco, mas deve ficar em observação:
-%	idade(X), febre(X), freq_cardiaca(X), freq_respiratoria(X), comorbidade(X)
-%	
+pac_sem_risco(X):-(   idade(X), febre(X), freq_cardiaca(X), freq_respiratoria(X), comorbidade(X) ),
+    print(X), write(" - paciente sem risco, mas deve ficar em observação\n").
+
 %  Paciente com risco, deve ser encaminhado para hospital:
-%	idade_alta(X); febre_alta(X); freq_respiratoria_altissima(X); p_arterial_altissima(X); sat_oxigenio_altissima(X); dispneia(X); comorbidade_alta(X).
+pac_risco(X):-(idade_alta(X); febre_alta(X); freq_respiratoria_altissima(X); 
+    p_arterial_altissima(X); sat_oxigenio_altissima(X); dispneia(X); 
+    comorbidade_alta(X) ), print(X), 
+    write(" - paciente de risco, deve ser encaminhado para hospital\n").
+
+pac_liberado(X):-not(pac_sem_risco(X)), print(X), 
+    write(" - paciente liberado, sem risco algum de contaminacao\n").
 
