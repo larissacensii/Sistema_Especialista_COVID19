@@ -41,9 +41,9 @@ paciente(pedro, 50, 36, 90, 15, 120, 100, false, 0). % sem risco, liberado (verd
 
 
 % Regras
-
-% OR = ;
-% AND = ,
+% 
+  % OR = ;
+  % AND = ,
 
 %Idade: Baixo risco(amarelo) = 60 a 79 anos
 idade(N):-paciente(N,I,_,_,_,_,_,_,_), I >= 60, paciente(N,I,_,_,_,_,_,_,_), I =< 79.
@@ -93,10 +93,7 @@ comorbidade_alta(N):-paciente(N,_,_,_,_,_,_,_,C), C >= 2.
 
 
 % Catogorização
-
-verifica_paciente(X):-pac_sem_risco(X). %; pac_risco(X).
-
-
+% 
 %  Paciente sem risco, mas deve ficar em observação:
 pac_sem_risco(X):-(   idade(X), febre(X), freq_cardiaca(X), freq_respiratoria(X), comorbidade(X) ),
     print(X), write(" - paciente sem risco, mas deve ficar em observação\n").%; pac_liberado(X).
@@ -107,8 +104,8 @@ pac_risco(X):-(idade_alta(X); febre_alta(X); freq_respiratoria_altissima(X);
     comorbidade_alta(X) ), print(X), 
     write(" - paciente de risco, deve ser encaminhado para hospital\n").
 
-pac_liberado(X):-not(pac_sem_risco(X)), print(X), 
+pac_liberado(X):- ( not(idade(X)), not(idade_alta(X)), not(febre(X)), not(febre_alta(X)), 
+	not(freq_cardiaca(X)), not(freq_respiratoria(X)), not(freq_respiratoria_altissima(X)),
+	not(p_arterial_alta(X)), not(p_arterial_altissima(X)), not(sat_oxigenio_altissima(X)), 
+	not(dispneia(X)), not(comorbidade(X)), not(comorbidade_alta(X)) ), print(X), 
     write(" - paciente liberado, sem risco algum de contaminacao\n").
-
-% TODO: willyam entrando em pac_liberado, quem deve entrar é Pedro.
-
